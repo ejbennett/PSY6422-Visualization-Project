@@ -100,7 +100,7 @@ ggplot(data = disability_grouped,
 
 ```
 
-The graph demonstrates that non-disabled individuals are approximately twice as likely to have obtained a degree compared to disabled individuals. Secondly, the graph shows an steady increase in degree attainment between 2013-2020, however the achievement gap remained similar despite this percentage increasing for both groups. 
+The graph demonstrates that non-disabled individuals are approximately twice as likely to have obtained a degree compared to disabled individuals. Secondly, the graph shows a steady increase in degree attainment between 2013-2020, however the achievement gap remained similar despite this percentage increasing for both groups. 
 
 ``` {r}
 
@@ -112,7 +112,7 @@ ggsave("figs/disability_degree2021-05-24.png")
 
 # **Summary**
 
-Overall, the data show a large attainment gap in education between the two groups, with disabled people having lower educational outcomes compared to their non-disabled counterparts. More research is still needed assessing the factors influencing the gap, to allow for better access, and achievement, of higher education in disabled individuals.
+Overall, the data shows a large attainment gap in education between the two groups, with disabled people having lower educational outcomes compared to their non-disabled counterparts. More research is still needed assessing the factors influencing the gap, to allow for better access to and achievement of higher education in disabled individuals.
 
 Due to time constraints, the current visualization only used data on degree attainment. Future visualizations could involve creating a bar graph showing the difference in educational outcomes between the two groups based on their highest qualification including A-levels and GCSE's. This would allow for a better understanding of whether the size of the attainment gap is the same across education or if the gap lessens/increases at different levels. 
 
