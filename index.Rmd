@@ -1,0 +1,121 @@
+---
+title: "PSY6422 Project | Disability and education"
+author: "Emily Bennett"
+date: "May 2021"
+output: html_document
+fontsize: 12pt
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# **Introduction**
+
+# Data Origins
+
+Data was gathered by the Annual population survey from the years 2013 - 2020 and collated into the final dataset. The dataset includes information on the highest level of education for 21 to 64 year olds in the UK, such as a Degree, A-levels, GCSEs or no-qualifications, based on disability status. Disability status was self identified in the study and disabled individuals were defined as having a long-lasting illness or impairment that impacts daily activities, consistent with the Equality Act (2010) definition. For disabled individuals, educational attainment was further analyzed based on additional factors including impairment type and severity, region, age and sex. For the purpose of the visualization, only the data on degree attainment was used. 
+
+The data required transformation into an appropriate .CSV file format to allow for importing to R studio and for the visualization. Further variable descriptors and information on data gathering can be found in the original dataset linked below and in the [github repository](https://github.com/ejbennett/PSY6422-Visualization-Project). All data was obtained through the Office of National Statistics website and can be found [here](https://www.ons.gov.uk/peoplepopulationandcommunity/healthandsocialcare/disability/datasets/disabilityandeducation)
+
+# Research Question
+
+Using the data, the visualization focuses on 2 primary research questions:
+
+1. Is there a difference in the percentage of Disabled vs Non-Disabled individuals who have obtained a degree? 
+2. Has degree attainment changed between the two groups over time (from July 2013 to June 2020)?
+
+# **Data Preparation**
+
+Tidyverse and here packages were loaded in Rstudio for both data preparation and visualization.
+
+
+```{r include = FALSE}
+
+library(tidyverse)
+
+library(here)
+
+```
+
+``` {r}
+
+
+#Setting the working directory and loading the data file to create an initial dataframe
+
+df <-  read.csv(here(setwd("~/PSY6422_Final_Project"),"data","disability_degree.csv"))
+
+head(df)
+
+#tidying up the data
+
+#selecting target data and removing irrelevant columns
+df <- df %>% 
+  select(Year,Disabled.with.Degree.or.equivalent,Non.disabled.with.Degree.or.equivalent)
+
+#simplifying column names
+
+colnames(df)<- c("year","d.degree","nd.degree")
+
+head(df)
+
+#creating a new dataframe by grouping the data based on disability status
+
+disability_grouped <- data.frame(x = with(df, c(year)),
+                                 y = with(df, c(d.degree, nd.degree)),
+                                 group = rep(c("Disabled", "Non-Disabled"), each=7))
+
+#displaying the new dataframe
+
+head(disability_grouped)
+
+
+```
+
+
+# **Visualization**
+
+
+```{r}
+
+#Creating a scatter plot to show the difference between disabled and Non-disabled individuals from 2013-2020
+
+ggplot(data = disability_grouped,
+       mapping = aes(x = x,
+                     y = y,
+                     col = group)) +
+  geom_point(shape=18, alpha = 0.8, size = 4) +                   #Changing the point shape and size
+  scale_y_continuous(limits=c(10, 40), breaks= seq(10, 40, 5)) +  #Changing y axis breaks and limits from the default
+  
+  scale_color_manual(values=c("#FAC218", "#905FD0")) +            #Changing point colours
+  scale_fill_discrete(name = "Disability Status") +                   
+  
+  theme(axis.text.x = element_text(angle = 42.5, vjust = 1, hjust = 1),#Changing x axis label angle to avoid overlaps
+        plot.title = element_text(hjust = 0.5)) +                      #Centering the chart title
+  labs(color = "Disability status",                                    #Renaming axis labels and titles
+       x = "Year", 
+       y = "Percentage of sample with degree (%)",
+       title = "Degree attainment by disability status",
+       caption = "Source: Office of national statistics")
+
+```
+
+The graph demonstrates that non-disabled individuals are approximately twice as likely to have obtained a degree compared to disabled individuals. Secondly, the graph shows an steady increase in degree attainment between 2013-2020, however the achievement gap remained similar despite this percentage increasing for both groups. 
+
+``` {r}
+
+#Saving the graph
+
+ggsave("figs/disability_degree2021-05-24.png")
+
+```
+
+# **Summary**
+
+Overall, the data show a large attainment gap in education between the two groups, with disabled people having lower educational outcomes compared to their non-disabled counterparts. More research is still needed assessing the factors influencing the gap, to allow for better access, and achievement, of higher education in disabled individuals.
+
+Due to time constraints, the current visualization only used data on degree attainment. Future visualizations could involve creating a bar graph showing the difference in educational outcomes between the two groups based on their highest qualification including A-levels and GCSE's. This would allow for a better understanding of whether the size of the attainment gap is the same across education or if the gap lessens/increases at different levels. 
+
+An interesting future direction for the research would be to collect data to visualize how the current coronavirus pandemic has impacted degree obtainment in both disabled and non-disabled individuals, including additional factors for analysis such as those who were required to shield or not during knockdown measures.
+
+Finally,  throughout the project one of the most important skills I learned was how to appropriately format a dataframe, specifically how to group data so it can be more efficiently visualized when creating a graph. As part of this, structuring the code to be easily readable, such as through line breaks in large coding chunks, was an important skill so that it was easier for me to quickly identify errors. 
